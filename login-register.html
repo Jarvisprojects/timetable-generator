@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+  <title>Academic Timetable Generator | Auth</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <style>
+    body, .font-sans { font-family: 'Inter', Arial, Helvetica, sans-serif !important; }
+    .auth-section { display: none; }
+    .auth-section.active { display: block; }
+    .floating-container {
+      background: rgba(255,255,255,0.88);
+      box-shadow: 0 12px 36px 12px rgba(51,41,183,0.11), 0 2px 8px rgba(0,0,0,0.08);
+      backdrop-filter: blur(12px);
+      border-radius: 2rem;
+      margin: 2rem;
+    }
+    @media (max-width: 480px) {
+      .floating-container { margin: 0.5rem; border-radius: 1rem; padding: 1.5rem !important; }
+      .title-xl { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-100 via-blue-50 to-indigo-200 min-h-screen flex items-center justify-center font-sans">
+
+  <div class="w-full max-w-lg floating-container py-10 px-12 sm:p-10 border border-indigo-100">
+    <!-- Login Section -->
+    <section id="loginSection" class="auth-section active">
+      <div class="text-center mb-8">
+        <h1 class="title-xl text-3xl font-extrabold text-indigo-800 tracking-tight">Academic Timetable Generator</h1>
+        <p class="text-gray-500 text-base mt-2">Login to your account</p>
+      </div>
+      <form id="loginForm" class="space-y-6" autocomplete="off" aria-label="Login Form">
+        <div>
+          <label for="loginEmail" class="block text-sm font-medium text-gray-700">Email</label>
+          <input id="loginEmail" type="email" placeholder="example@college.edu"
+            class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50" required/>
+        </div>
+        <div class="relative">
+          <label for="loginPassword" class="block text-sm font-medium text-gray-700">Password</label>
+          <input id="loginPassword" type="password" placeholder="••••••••"
+            class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10 bg-gray-50" required/>
+          <button type="button" id="showLoginPassword" class="absolute right-3 top-9 text-indigo-500 text-xs font-semibold focus:outline-none" tabindex="0">Show</button>
+        </div>
+        <div class="flex items-center justify-between text-xs sm:text-sm">
+          <label class="flex items-center space-x-2">
+            <input type="checkbox" id="rememberMe" class="text-indigo-600 rounded focus:ring-indigo-500"/>
+            <span class="text-gray-600">Remember me</span>
+          </label>
+          <a href="forgot-password.html" class="text-indigo-600 hover:underline font-medium">Forgot?</a>
+        </div>
+        <button type="submit" id="loginBtn"
+          class="w-full bg-indigo-700 text-white text-base font-semibold py-2 rounded-xl shadow-md hover:bg-indigo-900 focus:ring-4 focus:ring-indigo-400 transition-all">
+          <span id="loginBtnText">Sign In</span>
+        </button>
+      </form>
+      <div id="loginMsg" class="text-center text-sm mt-4"></div>
+      <div class="mt-6 text-center text-xs sm:text-sm text-gray-600">
+        <p>
+          Don’t have an account?
+          <button id="toRegisterBtn" class="text-indigo-700 font-semibold hover:underline ml-1">Register</button>
+        </p>
+      </div>
+    </section>
+
+    <!-- Register Section -->
+    <section id="registerSection" class="auth-section">
+      <div class="text-center mb-8">
+        <h1 class="title-xl text-3xl font-extrabold text-indigo-800 tracking-tight">Academic Timetable Generator</h1>
+        <p class="text-gray-500 text-base mt-2">Create a new account</p>
+      </div>
+      <form id="registerForm" class="space-y-6" autocomplete="off" aria-label="Register Form">
+        <div>
+          <label for="regName" class="block text-sm font-medium text-gray-700">Full Name</label>
+          <input id="regName" type="text" placeholder="Your name"
+            class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50" required/>
+        </div>
+        <div>
+          <label for="regEmail" class="block text-sm font-medium text-gray-700">Email</label>
+          <input id="regEmail" type="email" placeholder="example@college.edu"
+            class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50" required/>
+        </div>
+        <div class="relative">
+          <label for="regPassword" class="block text-sm font-medium text-gray-700">Password</label>
+          <input id="regPassword" type="password" placeholder="••••••••"
+            class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10 bg-gray-50" required minlength="6"/>
+          <button type="button" id="showRegisterPassword" class="absolute right-3 top-9 text-indigo-500 text-xs font-semibold focus:outline-none" tabindex="0">Show</button>
+        </div>
+        <div>
+          <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+          <input id="confirmPassword" type="password" placeholder="••••••••"
+            class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50" required minlength="6"/>
+        </div>
+        <div>
+          <label for="regRole" class="block text-sm font-medium text-gray-700">Role</label>
+          <select id="regRole" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50" required>
+            <option value="">Select role</option>
+            <option value="Admin/HOD">Admin/HOD</option>
+            <option value="Teacher">Teacher</option>
+            <option value="Student">Student</option>
+          </select>
+        </div>
+        <button type="submit" id="registerBtn"
+          class="w-full bg-indigo-700 text-white text-base font-semibold py-2 rounded-xl shadow-md hover:bg-indigo-900 focus:ring-4 focus:ring-indigo-400 transition-all">
+          Register
+        </button>
+      </form>
+      <div id="registerMsg" class="text-center text-sm mt-4"></div>
+      <div class="mt-6 text-center text-xs sm:text-sm text-gray-600">
+        <p>
+          Already have an account?
+          <button id="toLoginBtn1" class="text-indigo-700 font-semibold hover:underline ml-1">Login</button>
+        </p>
+      </div>
+    </section>
+  </div>
+
+<script>
+  // -- Initialize Firebase --
+  const firebaseConfig = {
+    apiKey: "AIzaSyDNO1ASD3GOeFhr-GWAbkKGZ5KrSm32ZTE",
+    authDomain: "time-52b7e.firebaseapp.com",
+    projectId: "time-52b7e",
+    storageBucket: "time-52b7e.appspot.com",
+    messagingSenderId: "340938054755",
+    appId: "1:340938054755:web:99c98398dd166ed1422c56",
+    measurementId: "G-8NJ2FBJN2T"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    window.location.replace("dashboard.html"); // Use replace() to prevent back button going back here
+  }
+});
+
+  // -- Inter-form navigation --
+  function showSection(section) {
+    document.querySelectorAll('.auth-section').forEach(s => s.classList.remove('active'));
+    document.getElementById(section).classList.add('active');
+    document.getElementById("loginMsg").textContent = "";
+    document.getElementById("registerMsg").textContent = "";
+    document.getElementById("loginForm").reset();
+    document.getElementById("registerForm").reset();
+  }
+  document.getElementById("toRegisterBtn").onclick = () => showSection("registerSection");
+  document.getElementById("toLoginBtn1").onclick = () => showSection("loginSection");
+
+  // -- Password toggles --
+  document.getElementById("showLoginPassword").onclick = function() {
+    const input = document.getElementById("loginPassword");
+    this.textContent = input.type === "password" ? "Hide" : "Show";
+    input.type = input.type === "password" ? "text" : "password";
+  };
+  document.getElementById("showRegisterPassword").onclick = function() {
+    const input = document.getElementById("regPassword");
+    this.textContent = input.type === "password" ? "Hide" : "Show";
+    input.type = input.type === "password" ? "text" : "password";
+  };
+
+  // -- Login Form (connects to Firebase!) --
+  document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    document.getElementById("loginBtn").disabled = true;
+    document.getElementById("loginBtnText").textContent = "Signing In...";
+    auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        document.getElementById("loginMsg").innerHTML =
+          `<span class='text-green-600 font-medium'>✅ Login successful! Redirecting...</span>`;
+        setTimeout(() => window.location.href = "dashboard.html", 1200);
+      })
+      .catch(error => {
+        document.getElementById("loginMsg").innerHTML =
+          `<span class='text-red-600 font-medium'>❌ ${error.message}</span>`;
+        document.getElementById("loginBtn").disabled = false;
+        document.getElementById("loginBtnText").textContent = "Sign In";
+      });
+  });
+
+  // -- Register Form (connects to Firebase!) --
+  document.getElementById("registerForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    const name = document.getElementById("regName").value.trim();
+    const email = document.getElementById("regEmail").value.trim();
+    const password = document.getElementById("regPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const role = document.getElementById("regRole").value;
+    if(password !== confirmPassword){
+      document.getElementById("registerMsg").innerHTML =
+        `<span class='text-red-600 font-medium'>❌ Passwords do not match.</span>`;
+      return;
+    }
+    if(!role) {
+      document.getElementById("registerMsg").innerHTML =
+        `<span class='text-red-600 font-medium'>❌ Please select a role.</span>`;
+      return;
+    }
+    document.getElementById("registerBtn").disabled = true;
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        userCredential.user.updateProfile({ displayName: name });
+        document.getElementById("registerMsg").innerHTML =
+          `<span class='text-green-600 font-medium'>✅ Registration successful. Redirecting to login...</span>`;
+        setTimeout(() => showSection("loginSection"), 1500);
+      })
+      .catch(error => {
+        document.getElementById("registerBtn").disabled = false;
+        document.getElementById("registerMsg").innerHTML =
+          `<span class='text-red-600 font-medium'>❌ ${error.message}</span>`;
+      });
+  });
+
+</script>
+</body>
+</html>

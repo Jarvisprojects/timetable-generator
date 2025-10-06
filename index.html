@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Academic Timetable Generator | Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <style>
+    body { font-family: 'Inter', Arial, Helvetica, sans-serif !important; }
+    .main-block { 
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); 
+      border-radius: 2.25rem; 
+      box-shadow: 0 4px 36px 12px rgba(79,70,229,.12), 0 2px 8px rgba(0,0,0,.05); 
+      margin: 2rem 0; 
+      border: 1px solid rgba(99, 102, 241, 0.1);
+    }
+    .section-block { 
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.06) 100%); 
+      border-radius: 1.25rem; 
+      box-shadow: 0 2px 12px rgba(79,70,229,.08);
+      border: 1px solid rgba(99, 102, 241, 0.15);
+    }
+    .feature-pill {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    }
+    .feature-pill:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+    .workflow-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+      border-left: 4px solid #6366f1;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+    }
+    .workflow-card:hover {
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
+      transform: translateX(2px);
+    }
+    .cta-primary {
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+    }
+    .cta-primary:hover {
+      background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    }
+    .cta-secondary {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border: 2px solid #6366f1;
+      color: #6366f1;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+    }
+    .cta-secondary:hover {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      transform: translateY(-1px);
+    }
+    @media (max-width:600px) {
+      .main-block { border-radius: 0.9rem; margin: 0.5rem 0; padding: 1rem !important;}
+      .section-block { border-radius: 0.6rem; }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-violet-100 via-indigo-50 to-blue-100 min-h-screen w-full flex items-center justify-center">
+
+  <main class="main-block w-full max-w-2xl px-8 sm:px-16 py-9 sm:py-14 mx-auto flex flex-col items-center gap-10">
+
+    <!-- Project Title & Tagline Block -->
+    <section class="w-full section-block text-center py-8 px-4 mb-3">
+      <h1 class="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+        Academic Timetable Generator
+      </h1>
+      <p class="text-lg text-gray-700 font-medium max-w-2xl mx-auto">
+        <span class="text-indigo-700 font-semibold">A Final Year Project for Colleges</span>.<br>
+        Automatically generate accurate, conflict-free weekly academic timetables for SY, TY and more—<b class="text-purple-700">fair, fast, and hassle-free</b>.
+      </p>
+    </section>
+
+    <!-- Features Block (Pills style) -->
+    <section class="w-full section-block py-7 px-4 mb-3 flex flex-wrap justify-center gap-4">
+      <span class="feature-pill px-5 py-2 rounded-full font-semibold text-sm transition-all duration-200">Multi-year Scheduling (SY, TY...)</span>
+      <span class="feature-pill px-5 py-2 rounded-full font-semibold text-sm transition-all duration-200">No Teacher/Lab Overlaps</span>
+      <span class="feature-pill px-5 py-2 rounded-full font-semibold text-sm transition-all duration-200">Batch-wise Practicals</span>
+      <span class="feature-pill px-5 py-2 rounded-full font-semibold text-sm transition-all duration-200">Fair Teacher Workload</span>
+      <span class="feature-pill px-5 py-2 rounded-full font-semibold text-sm transition-all duration-200">PDF & Excel Export</span>
+      <span class="feature-pill px-5 py-2 rounded-full font-semibold text-sm transition-all duration-200">Admin/Teacher/Student Roles</span>
+    </section>
+    
+    <!-- Block: System Workflow/Roadmap -->
+    <section class="w-full section-block py-7 px-6 mb-3">
+      <h2 class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4 text-left">How It Works</h2>
+      <div class="grid grid-cols-1 gap-3">
+        <div class="workflow-card rounded-lg px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-1 transition-all duration-200">
+          <span class="font-bold text-indigo-700 sm:w-28">1. Setup</span>
+          <span class="text-gray-700 text-sm">Add years, subjects, teachers, labs, rooms, timings.</span>
+        </div>
+        <div class="workflow-card rounded-lg px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-1 transition-all duration-200">
+          <span class="font-bold text-indigo-700 sm:w-28">2. Coordination</span>
+          <span class="text-gray-700 text-sm">Handle shared teachers/labs, avoid scheduling conflicts.</span>
+        </div>
+        <div class="workflow-card rounded-lg px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-1 transition-all duration-200">
+          <span class="font-bold text-indigo-700 sm:w-28">3. Generation</span>
+          <span class="text-gray-700 text-sm">Automatic multi-year, batchwise timetable creation.</span>
+        </div>
+        <div class="workflow-card rounded-lg px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-1 transition-all duration-200">
+          <span class="font-bold text-indigo-700 sm:w-28">4. Validation</span>
+          <span class="text-gray-700 text-sm">Checks for errors, teacher/lab conflicts, and fairness.</span>
+        </div>
+        <div class="workflow-card rounded-lg px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-1 transition-all duration-200">
+          <span class="font-bold text-indigo-700 sm:w-28">5. Export</span>
+          <span class="text-gray-700 text-sm">Download your perfect timetable as PDF or Excel.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Block: Call-to-action -->
+    <section class="w-full flex flex-col sm:flex-row gap-5 justify-center mt-1">
+      <a href="login-register.html"
+         class="cta-primary text-white text-base font-semibold py-3 px-8 rounded-xl text-center transition-all duration-200">
+        Login / Get Started
+      </a>
+      <a href="login-register.html#registerSection"
+         class="cta-secondary text-base font-semibold py-3 px-8 rounded-xl text-center transition-all duration-200">
+        Register
+      </a>
+    </section>
+
+    <!-- Footer block -->
+    <footer class="w-full py-8 mt-6 text-center text-xs text-gray-500 border-t border-indigo-200">
+      Academic Timetable Generator | Final Year Project &copy; 2025
+    </footer>
+  </main>
+</body>
+</html>
