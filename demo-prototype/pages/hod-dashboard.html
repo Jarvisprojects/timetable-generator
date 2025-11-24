@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>HOD Dashboard — Demo</title><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="../css/demo.css" /></head><body class="bg-gray-50 min-h-screen">
+  <div class="flex min-h-screen">
+    <aside id="sidebar" class="w-64 bg-indigo-600 text-white p-4">
+      <div class="mb-6">
+        <img src="../assets/logo.svg" class="h-10 w-10 mb-2" onerror="this.style.display='none'"/>
+        <div class="text-lg font-semibold">ATG Demo</div>
+        <div id="hod-name-sidebar" class="text-sm text-indigo-200 mt-1">HOD Demo</div>
+      </div>
+      <nav class="mt-4 space-y-2">
+        <a id="nav-dashboard" class="block py-2 px-3 rounded hover:bg-indigo-700">Dashboard</a>
+        <a id="nav-inputs" class="block py-2 px-3 rounded hover:bg-indigo-700">Inputs</a>
+        <a id="nav-generator" class="block py-2 px-3 rounded hover:bg-indigo-700">Generator</a>
+        <a id="nav-timetable" class="block py-2 px-3 rounded hover:bg-indigo-700">Timetable</a>
+        <a id="nav-versions" class="block py-2 px-3 rounded hover:bg-indigo-700">Versions</a>
+        <a id="nav-exports" class="block py-2 px-3 rounded hover:bg-indigo-700">Exports</a>
+        <a id="nav-logout" class="block py-2 px-3 rounded hover:bg-indigo-700 text-sm">Logout</a>
+      </nav>
+    </aside>
+    <main class="flex-1 p-6">
+      <header class="flex items-center justify-between mb-6">
+        <div><h1 class="text-2xl font-semibold" id="hod-dashboard-title">HOD Dashboard</h1><div class="text-sm text-gray-600">Welcome — manage inputs and run the generator</div></div>
+        <div class="flex items-center gap-3">
+          <button id="btn-open-inputs" class="px-3 py-2 rounded border border-gray-200">Open Inputs</button>
+          <button id="btn-open-generator" class="px-3 py-2 rounded bg-indigo-600 text-white">Open Generator</button>
+        </div>
+      </header>
+      <div class="grid grid-cols-4 gap-4 mb-6">
+        <div class="p-4 demo-card"><div class="text-sm text-gray-500">Teachers</div><div id="stat-teachers" class="text-2xl font-semibold mt-2">0</div></div>
+        <div class="p-4 demo-card"><div class="text-sm text-gray-500">Rooms</div><div id="stat-rooms" class="text-2xl font-semibold mt-2">0</div></div>
+        <div class="p-4 demo-card"><div class="text-sm text-gray-500">Courses</div><div id="stat-courses" class="text-2xl font-semibold mt-2">0</div></div>
+        <div class="p-4 demo-card"><div class="text-sm text-gray-500">Last version</div><div id="stat-last-version" class="text-sm mt-2 text-gray-700">—</div></div>
+      </div>
+      <section class="mb-6"><div class="flex items-center gap-3"><button id="btn-add-teacher" class="px-4 py-2 rounded bg-emerald-500 text-white">Add Teacher</button><button id="btn-open-template" class="px-4 py-2 rounded border">Open Template</button><button id="btn-run-quick" class="px-4 py-2 rounded bg-indigo-600 text-white">Run Generator</button></div></section>
+      <section id="main-content" class="demo-card p-4"><p class="text-sm text-gray-600">Use the sidebar to navigate. Use Inputs → Teachers to add teacher records. Use Generator to run a demo generation.</p></section>
+    </main>
+  </div>
+  <div id="modal-teacher" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40">
+    <div class="bg-white rounded p-4 w-full max-w-md">
+      <h3 class="text-lg font-semibold mb-3">Add / Edit Teacher</h3>
+      <form id="modal-teacher-form" onsubmit="return false;" class="space-y-3">
+        <div><label class="text-sm">Name</label><input id="teacher-name" class="mt-1 block w-full border rounded px-3 py-2" /></div>
+        <div><label class="text-sm">Email</label><input id="teacher-email" class="mt-1 block w-full border rounded px-3 py-2" /></div>
+        <div><label class="text-sm">Preferred load (hours/week)</label><input id="teacher-load" type="number" class="mt-1 block w-full border rounded px-3 py-2" /></div>
+        <div class="flex items-center justify-end gap-2"><button id="teacher-cancel" class="px-3 py-2 rounded border">Cancel</button><button id="teacher-save" class="px-3 py-2 rounded bg-indigo-600 text-white">Save</button></div>
+      </form>
+    </div>
+  </div>
+  <script src="../js/state.js"></script><script src="../js/ui.js"></script>
+  <script>
+    function refreshStats() {
+      const s = DemoState.getState();
+      document.getElementById('stat-teachers').textContent = s.teachers.length;
+      document.getElementById('stat-rooms').textContent = s.rooms.length;
+      document.getElementById('stat-courses').textContent = s.courses.length;
+      if (s.versions && s.versions.length) {
+        const latest = s.versions[s.versions.length - 1];
+        document.getElementById('stat-last-version').textContent = new Date(latest.createdAt).toLocaleString();
+      } else { document.getElementById('stat-last-version').textContent = '—'; }
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      refreshStats();
+      document.getElementById('btn-add-teacher').addEventListener('click', function () { DemoUI.openModal('modal-teacher'); });
+      document.getElementById('btn-open-template').addEventListener('click', function () { window.location.href = 'timetable/template.html'; });
+      document.getElementById('btn-open-inputs').addEventListener('click', function () { window.location.href = 'inputs/teachers.html'; });
+      document.getElementById('btn-open-generator').addEventListener('click', function () { window.location.href = 'generator.html'; });
+      document.getElementById('btn-run-quick').addEventListener('click', function () { window.location.href = 'generator.html'; });
+      document.getElementById('teacher-cancel').addEventListener('click', function () { DemoUI.closeModal('modal-teacher'); });
+      document.getElementById('teacher-save').addEventListener('click', function () {
+        const name = document.getElementById('teacher-name').value.trim();
+        const email = document.getElementById('teacher-email').value.trim();
+        const load = parseInt(document.getElementById('teacher-load').value, 10) || 0;
+        if (!name || !email) { DemoUI.showSnackbar('Name and email are required', 'error'); return; }
+        const teacher = { teacherId: 'T' + Math.floor(Math.random() * 900 + 100), name, email, preferredLoad: load, availability: [] };
+        DemoState.addTeacher(teacher);
+        DemoUI.showSnackbar('Teacher saved', 'success');
+        DemoUI.closeModal('modal-teacher');
+        refreshStats();
+      });
+      document.getElementById('modal-teacher').addEventListener('click', function (e) { if (e.target === this) DemoUI.closeModal('modal-teacher'); });
+    });
+  </script>
+</body></html>

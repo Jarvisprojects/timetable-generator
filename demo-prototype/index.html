@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Automatic Timetable Generator — Demo Landing</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/demo.css" />
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+  <div class="w-full max-w-3xl p-6">
+    <div class="bg-white p-6 rounded-lg shadow demo-card text-center">
+      <img src="assets/logo.svg" alt="Logo" class="mx-auto h-16 w-16 mb-4" onerror="this.style.display='none'"/>
+      <h1 class="text-2xl font-semibold mb-2">Automatic Timetable Generator — Demo</h1>
+      <p class="text-sm text-gray-600 mb-6">Choose a demo role to try the UI (data is stored in your browser).</p>
+      <div class="grid grid-cols-3 gap-4">
+        <button id="btn-hod-demo" class="px-4 py-3 rounded bg-indigo-600 text-white">HOD Demo</button>
+        <button id="btn-teacher-demo" class="px-4 py-3 rounded bg-emerald-500 text-white">Teacher Demo</button>
+        <button id="btn-student-demo" class="px-4 py-3 rounded border border-gray-200">Student Demo</button>
+      </div>
+      <div class="mt-6 text-sm text-gray-500">
+        <a href="pages/login.html" class="underline">Or open the login page</a> • <a href="docs/demo-instructions.md" class="underline">Demo instructions</a>
+      </div>
+    </div>
+    <footer class="mt-4 text-xs text-gray-500 text-center">
+      Demo - data saved in <strong>localStorage</strong> under key <span class="font-mono">demo_state_v1</span>.
+    </footer>
+  </div>
+  <script src="js/ui.js"></script>
+  <script>
+    document.getElementById('btn-hod-demo').addEventListener('click', function () {
+      DemoUI.setSessionAndRedirect({ role: 'hod', email: 'hod@demo.local' });
+    });
+    document.getElementById('btn-teacher-demo').addEventListener('click', function () {
+      DemoUI.setSessionAndRedirect({ role: 'teacher', email: 'teacher1@demo.local' });
+    });
+    document.getElementById('btn-student-demo').addEventListener('click', function () {
+      DemoUI.setSessionAndRedirect({ role: 'student', email: 'student1@demo.local' });
+    });
+  </script>
+</body>
+</html>
