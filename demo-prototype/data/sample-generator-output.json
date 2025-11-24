@@ -1,0 +1,20 @@
+{
+  "versionId": "vt-demo-001",
+  "createdAt": "2025-11-24T12:00:00Z",
+  "createdBy": "HOD-Demo",
+  "data": {
+    "cell_SE2A_MON_S1": { "courseId": "CS201", "teacherId": "T101", "roomId": "R-201" },
+    "cell_SE2A_MON_S2": { "courseId": "CS202", "teacherId": "T102", "roomId": "R-201" },
+    "cell_SE2A_MON_S3": { "courseId": "CS203", "teacherId": "T103", "roomId": "LAB-1" },
+    "cell_SE2B_MON_S1": { "courseId": "CS201", "teacherId": "T102", "roomId": "R-201" },
+    "cell_SE2B_MON_S2": { "courseId": "CS202", "teacherId": "T101", "roomId": "R-201" },
+    "cell_SE2B_MON_S3": { "courseId": "CS203", "teacherId": "T103", "roomId": "LAB-1" },
+    "cell_SE2A_TUE_S1": { "courseId": "CS202", "teacherId": "T101", "roomId": "R-201" },
+    "cell_SE2A_TUE_S2": { "courseId": "CS201", "teacherId": "T102", "roomId": "R-201" },
+    "cell_SE2A_TUE_S3": { "courseId": "CS203", "teacherId": "T103", "roomId": "LAB-1" },
+    "cell_SE2B_TUE_S1": { "courseId": "CS202", "teacherId": "T102", "roomId": "R-201" },
+    "cell_SE2B_TUE_S2": { "courseId": "CS201", "teacherId": "T101", "roomId": "R-201" },
+    "cell_SE2B_TUE_S3": { "courseId": "CS203", "teacherId": "T103", "roomId": "LAB-1" }
+  },
+  "stats": { "generationMs": 12000, "conflicts": 0 }
+}
